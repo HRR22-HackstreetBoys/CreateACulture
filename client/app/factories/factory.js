@@ -78,7 +78,7 @@ angular.module('app.factory', [])
       data: user
     })
     .then(function (resp) {
-      console.log("Response from signin: ", resp);
+      // console.log("Response from signin: ", resp);
       return resp.data.token;
     })
     .catch(function(error){
