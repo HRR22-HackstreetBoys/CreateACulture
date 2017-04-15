@@ -1,14 +1,19 @@
 angular.module('app.auth', [])
 
-.controller('AuthController', function ($scope, $window, $location, Auth) {
+.controller('AuthController', function ($scope, $window, $location, dataService, Categories, Auth) {
   $scope.user = {};
 
   $scope.signin = function () {
     Auth.signin($scope.user)
       .then(function (token) {
         $window.localStorage.setItem('com.createaculture', token);
-        $location.path('/');
-        console.log("user signed in")
+        $window.localStorage.setItem('user', $scope.user.username);        
+        Categories.getUserCatsAndBeliefs($scope.user.username)
+          .then(function(data) {
+            dataService.mainBeliefs = data.mainBeliefs;
+            dataService.returningUserCategories = data.categories;
+          });
+        $location.path('/homebase');
       })
       .catch(function (error) {
         console.error(error);
@@ -19,7 +24,7 @@ angular.module('app.auth', [])
     Auth.signup($scope.user)
       .then(function (resp) {
         $window.localStorage.setItem('com.createaculture', resp.data.token);
-        $window.localStorage.setItem('user', resp.data.user);
+        $window.localStorage.setItem('user', resp.data.user);        
         $location.path('/');
         console.log("New user signed up!")
       })
@@ -40,7 +45,7 @@ angular.module('app.auth', [])
       });
   };
 
-   $scope.facebook = {
+  $scope.facebook = {
     username : "",
     email : ""
   };
@@ -78,6 +83,7 @@ angular.module('app.auth', [])
         .catch(function (error) {
           console.log(error);
         });
+    $location.path('/');  
   };
 
 

@@ -13,10 +13,8 @@ var findUserCategory = Q.nbind(UserCategory.findOne, UserCategory);
 var createUserCategory = Q.nbind(UserCategory.create, UserCategory);
 var findOneAndChange = Q.nbind(UserCategory.findOneAndUpdate, UserCategory);
 var removeUserCategory = Q.nbind(UserCategory.remove, UserCategory);
+var findUserAndGetCategories = Q.nbind(UserCategory.find, UserCategory);
 
-
-var categories = ['Faith', 'Hope', 'Kindness', 'Fortitude', 'Diligence',
-                  'Prudence', 'Temperance'];
 
 module.exports = {
  ///////////////////////////user authentication requests//////////////////////
@@ -33,9 +31,20 @@ module.exports = {
           return user.comparePassword(password)
             .then(function (foundUser) {
               if (foundUser) {
-                var token = jwt.encode(user, 'secret');
-                console.log("this is the users token " + token);
-                res.json({token: token, username: username});
+                findUserAndGetCategories({'username': username})
+                  .then(function(cats) {
+                      var categories = [];
+                      cats.forEach(function(cat){
+                        categories.push(cat.name);
+                      });
+                      var token = jwt.encode(user, 'secret');
+                      res.json({
+                        token: token, 
+                        username: username, 
+                        mainBeliefs: user.mainBeliefs,
+                        categories: categories
+                      });
+                  })
               } else {
                 return next(new Error('No user'));
               }
@@ -74,12 +83,21 @@ module.exports = {
       .then(function (user) {
         if (user) {
           next(new Error('user already exists!'));
-          console.log('user already exists!');
+          // console.log('user already exists!');
         } else {
           categories.forEach(function(cat){
             return createUserCategory({
               username: username,
               category: cat
+            });
+          });
+          categories.forEach(function(cat){
+            return findUserAndChange(
+              {username: username},
+              {$push: {categories: cat}},
+              {safe: true, upsert: true}
+            ).catch(function(err){
+              console.log(err);
             });
           });
         }
@@ -129,6 +147,7 @@ module.exports = {
           }
     })
   },
+
  ///////////////////////////usercategory requests//////////////////////
 
   getUserCategories: function(req, res, next) {
@@ -153,6 +172,7 @@ module.exports = {
       console.log(err);
     });
   },
+
   //field on each user document
   addMainBeliefs: function(req, res) {
     console.log("Request.body: ", req.body);
@@ -168,10 +188,20 @@ module.exports = {
   // The one below is for adding a SINGLE belief to the
   // user's mainBeliefs field
   addMainBelief: function(req, res) {
-    console.log("Request.body: ", req.body);
     findUserAndChange(
       {username: req.body.username},
       {$push: {mainBeliefs: req.body.belief}},
+      {safe: true, upsert: true}
+    ).catch(function(err){
+      console.log(err);
+    });
+  },
+
+  deleteMainBelief: function(req, res) {
+    console.log("Request.body: ", req.body);
+    findUserAndChange(
+      {username: req.body.username},
+      {$pull: {mainBeliefs: req.body.belief}},
       {safe: true, upsert: true}
     ).catch(function(err){
       console.log(err);
@@ -192,7 +222,6 @@ module.exports = {
     console.log("Req.body.name: ", req.body.username);
     console.log("Req.body.index: ", req.body.index);
     console.log("Req.body.updated: ", req.body.updated);
-    // did not work
     var set = {$set: {}};
     set.$set["mainBeliefs." + req.body.index] = req.body.updated;
     findUserAndChange({username: req.body.username}, set)
@@ -225,6 +254,15 @@ module.exports = {
         })
       }
     })
+  },
+
+  getCatsAndBeliefs: function(req, res) {
+    findUser({username: req.body.username})
+      .then(function(user){
+        res.json({mainBeliefs: user.mainBeliefs, categories: user.categories});
+      }).catch(function(err){
+        console.log(err);
+      });
   }
 
 };

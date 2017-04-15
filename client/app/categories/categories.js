@@ -4,6 +4,8 @@ angular.module('app.categories', ['app.checklist-model'])
   this.choices = [];
   this.primary = [];
   this.sevenBeliefs = [];
+  this.mainBeliefs = [];
+  this.returningUserCategories = [];
 })
 
 .controller('categoriesController', function($scope, $location, dataService, Categories, Auth) {
@@ -11,10 +13,18 @@ angular.module('app.categories', ['app.checklist-model'])
 // $scope is the intermediary between what the user sees and the
 // factory. $scope methods grab from the factory and display it
 // via html
+
+  $scope.sevenBeliefs = dataService.sevenBeliefs;
+  $scope.choices = dataService.choices;
+  $scope.primary = dataService.primary;
+  $scope.mainBeliefs = dataService.mainBeliefs;
+  $scope.returningUserCategories = dataService.returningUserCategories;
+
   $scope.workable = [];
 
   $scope.getAll = function() {
     Categories.getCategories().then(function(data){
+      // console.log("Scope.getAll: ", data);
       $scope.data = data;
       for(var i = 0; i < data.length; i ++){
         $scope.workable.push(data[i].name);
@@ -27,21 +37,12 @@ angular.module('app.categories', ['app.checklist-model'])
     })
   };
 
-  $scope.showchoices = function() {
-    console.log("chocies: ", $scope.choices);
-  }
-
   $scope.getAll();
   $scope.obj = {};
 
   $scope.beliefDiv7 = true;
   $scope.beliefDiv8 = true;
   $scope.beliefDiv9 = true;
-
-  $scope.sevenBeliefs = dataService.sevenBeliefs;
-
-  $scope.choices = dataService.choices;
-  $scope.primary = dataService.primary;
 
   $scope.addBeliefsToUser = function(beliefsArray) {
     Auth.addBeliefsToUser(beliefsArray);
@@ -53,8 +54,6 @@ angular.module('app.categories', ['app.checklist-model'])
 
   $scope.grabResponseAndShowQuestionTwo = function() {
     $location.path('/finalthree');
-    // $scope.questionOneDiv = false;
-    // $scope.questionTwoDiv = true;
   }
 
   $scope.getRandomBelief = function(itemId) {
@@ -102,10 +101,20 @@ angular.module('app.categories', ['app.checklist-model'])
   $scope.updateAddedBelief = function(index, updatedBelief) {
     $scope.sevenBeliefs[index] = updatedBelief;
     Auth.updateAddedBelief(index, updatedBelief)
-    .then(function(success) {
-      $scope.updatedBelief = null;
-      console.log(success);
-    }).catch(function(err) {
+      .then(function(success) {
+        $scope.updatedBelief = null;
+        console.log(success);
+      }).catch(function(err) {
+        console.log(err);
+    })
+  }
+
+  $scope.deleteMainBelief = function(index) {
+    var belief = $scope.mainBeliefs.splice(index, 1)[0];
+    Auth.deleteMainBelief(belief)
+      .then(function(success) {
+        console.log("Belief deleted", success);
+      }).catch(function(err) {
       console.log(err);
     })
   }
@@ -159,7 +168,6 @@ angular.module('app.categories', ['app.checklist-model'])
         var answer = list.splice(list.indexOf(item), 1);
         Categories.removeCategory(item);
       }
-
   }
 
   $scope.makeImage = function() {

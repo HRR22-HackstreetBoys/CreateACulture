@@ -4,7 +4,13 @@
       <div class="masthead clearfix">
         <div class="inner">
           <div class="inner cover">
-            <div class="beliefsContainer" ng-controller="categoriesController">
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>         
+
+           <div class="beliefsContainer" ng-controller="categoriesController">
               <h1>Your Cultural Summary</h1>
               <br/>
               <br/>
@@ -43,40 +49,52 @@
       <br/>
       <br/>
               <table>
-              <tr ng-style="{'font-size': '20px'}" ng-repeat="belief in sevenBeliefs track by $index">
-              <td>
-              </td>
-                <td align="left">
-                <span ng-class="{ bubble: insane, Monospace: monoSpace, Impact: Impact, comic: comic }">{{$index+1}}. {{belief}}
-                </td>
+                <tr ng-style="{'font-size': '20px'}" ng-repeat="belief in mainBeliefs track by $index">
+                  <td>
 
-                <td align="right">  
-                <button class="cover btn-lg choiceOneBtn" ng-click="getRandomBelief($index);">Change It</button><div ng-show="beliefDiv{{$index}}"><input type="text" name="updateBelief" ng-model="updatedBelief" ngMaxLength="240" required="String">
+                    <button type="submit" ng-click="deleteMainBelief($index)" class="btn btn-success btn-info deleteBeliefButton">Delete</button> 
 
-                  <button type="submit" ng-click="updateAddedBelief($index, updatedBelief)" class="btn btn-success btn-info updatedAddedBeliefButton">Update</button> </span>
-                </td>
+                  </td>
+
+                  <td align="left">
+
+                    <span ng-class="{ bubble: insane, Monospace: monoSpace, Impact: Impact, comic: comic }">{{$index+1}}. {{belief}}
+
+                  </td>
+
+                  <td align="right"> 
+
+                    <button class="cover btn-lg choiceOneBtn" ng-click="getRandomBelief($index);">Change It</button>
+
+                    <div ng-show="beliefDiv{{$index}}">
+                      <input type="text" name="updateBelief" ng-model="updatedBelief" ngMaxLength="240" required="String">
+
+                      <button type="submit" ng-click="updateAddedBelief($index, updatedBelief)" class="btn btn-success btn-info updatedAddedBeliefButton">Update</button> 
+                    </div>
+
+                  </td>
                 </tr>
             </table>
             
               <br/>
               <br/>
 
-            <h2>Want to add your own to the list?</h2>
+            <h2>Add a Belief</h2>
 
             <br/>
 
-
             <div class="addToSevenBeliefs">
               <input type="text" name="addBelief" ng-model="addedBelief" ngMaxLength="240" required="String">
-           <!--  <button class="btn-danger" ng-click="removeCategory(data, category)">Remove</button> -->
-                <button type="submit" ng-click="grabResponseAndAddToSevenBeliefs()" class="btn-primary">Submit</button>
+
+                <button type="submit" ng-click="loggingMainBeliefs()" class="btn">Submit</button>
                 <br/>
                 <br/>
                 <br/>
-                <h1>When you're ready, click below and we'll create an image of your cultural summary</h1>
-                <button type="submit" ng-click="makeImage()" class="btn-primary" >Submit</button>
+
 
             </div>
+          </div>
+            
           </div>
         </div>
       </div>

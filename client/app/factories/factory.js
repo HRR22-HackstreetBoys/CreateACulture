@@ -40,33 +40,27 @@ angular.module('app.factory', [])
     })
   };
 
+  var getUserCatsAndBeliefs = function(username) {
+    return $http({
+      method: 'POST',
+      url: 'api/getusercatsandbeliefs',
+      data: {
+        username: username
+      }
+    })
+    .then(function(response) {
+      // console.log("Response.data in GETUSERCATSAND: ", response.data);
+      return response.data;
+    })
+  };
+
   return {
     getCategories: getCategories,
     getRandomBelief: getRandomBelief,
-    addBelief: addBelief
+    addBelief: addBelief,
+    getUserCatsAndBeliefs: getUserCatsAndBeliefs
   }
 })
-
-// .factory('FabricRender', function(fabric) {
-//   var canvas;
-//   function render() {
-//     if(!canvas) {
-//       return;
-//     }
-//   // your render logic with provided canvas instance
-
-
-//   }
-
-//   function init(canvasInstance) {
-//     canvas = canvasInstance;
-//     render();
-//   }
-//   return {
-//     init: init
-//     // do some clean up by exporting destroy function
-//   }
-// })
 
 .factory('Auth', function ($http, $location, $window) {
   // Don't touch this Auth service!!!
@@ -85,8 +79,8 @@ angular.module('app.factory', [])
       data: user
     })
     .then(function (resp) {
+      console.log("Response from signin: ", resp);
       return resp.data.token;
-
     });
   };
 
@@ -95,7 +89,6 @@ angular.module('app.factory', [])
       method: 'POST',
       url: '/api/users/signup',
       data: user
-
     })
     .then(function (resp) {
        return resp.data;
@@ -220,6 +213,24 @@ angular.module('app.factory', [])
     })
   };
 
+  var deleteMainBelief = function(belief) {
+    console.log("reached factory");
+    console.log("belief: ", belief);
+    var username = $window.localStorage.getItem('user');
+    return $http({
+      method: 'POST',
+      url: 'api/deletebelief',
+      data: {
+        username: username,
+        belief: belief
+      }
+    })
+    .then(function(response) {
+      console.log("Response from updateAddedBelief: ", response);
+      return response;
+    })
+  }
+
   return {
     signin: signin,
     signup: signup,
@@ -230,8 +241,8 @@ angular.module('app.factory', [])
     removeUserCategories: removeUserCategories,
     addBeliefsToUser: addBeliefsToUser,
     addBeliefToUser: addBeliefToUser,
-    updateAddedBelief: updateAddedBelief
-
+    updateAddedBelief: updateAddedBelief,
+    deleteMainBelief: deleteMainBelief
   }
 
 });

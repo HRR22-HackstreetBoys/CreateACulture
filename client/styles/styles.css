@@ -25,6 +25,7 @@ a {
   font-size: 25px;
 }
 
+<<<<<<< HEAD
 .checkboxList {
     margin: 50px 20px;
     color: black;
@@ -33,6 +34,16 @@ a {
 .checkboxListThree {
   margin: 90px 20px;
   color: black;
+}
+
+input, select, textarea{
+    color: #ff0000;
+}
+
+.checkboxList {
+  color: #4fff;
+  padding: 30px;
+  height: 20px;
 }
 
 /*p {
@@ -95,6 +106,17 @@ a {
  * Base structure
  */
 
+html,
+body {
+  height: 100%;
+  background-color: #85aaff;
+}
+
+body {
+  color: #4fff;
+  text-align: center;
+  text-shadow: 0 .05rem .1rem rgba(0,0,0,.5);
+}
 
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
