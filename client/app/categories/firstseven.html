@@ -11,7 +11,7 @@
           </div>
 
           <div ng-controller="categoriesController">
-
+          <hr>
             <label class="checkboxList bigger-checklist" ng-repeat="category in data">
 
               <input type="checkbox" checklist-model="choices" checklist-value="category.name" class="checkboxList" checklist-change="checkChanged(name)" ng-disabled="checked===limit">{{category.name}}
@@ -21,11 +21,10 @@
             <br/>
 
             <p class="lead">
-              <button type="submit" ng-click="grabResponseAndShowQuestionTwo()" class="btn btn-lg btn-secondary">Submit</button>
+              <button type="submit" ng-click="grabResponseAndShowQuestionTwo()" class="btn-primary" >Submit</button>
             </p>
 
-<!--             
- -->
+          </hr>
           </div>
         </div>
       </div>
@@ -34,6 +33,6 @@
 
 
 
- 
+
 
 

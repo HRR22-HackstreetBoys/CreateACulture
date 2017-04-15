@@ -7,8 +7,8 @@ var app = express();
 
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost/createaculture');
-// mongoose.connect('mongodb://jimmysixstrings:durango12@ds155490.mlab.com:55490/createaculture');
+//mongoose.connect('mongodb://localhost/createaculture');
+ mongoose.connect('mongodb://jimmysixstrings:durango12@ds155490.mlab.com:55490/createaculture');
 
 require('./config/routes.js')(app, express);
 require('./config/middleware.js')(app, express);

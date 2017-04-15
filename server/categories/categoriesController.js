@@ -38,7 +38,28 @@ module.exports = {
     .fail(function(error) {
       next(error);
     });
-  }
+  },
+
+  // removeCategory: function(req, res, next) {
+  //   console.log("this is the category to remove ", req.body);
+  //   var name = req.body.name;
+  //   findCategory({name: name})
+  //   .then(function (category) {
+  //     if (!category) {
+  //       next(new Error('category does not exist'));
+  //     } else {
+  //         removeCategory({name: name}, function(err) {
+  //           if(!err) {
+  //             console.log("category removed!")
+  //           } else {
+  //             console.log(err)
+  //           }
+  //         })
+  //       }
+  //   })
+
+  // }
+
 
 };
 

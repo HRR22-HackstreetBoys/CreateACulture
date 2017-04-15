@@ -7,7 +7,7 @@ angular.module('app.auth', [])
     Auth.signin($scope.user)
       .then(function (token) {
         $window.localStorage.setItem('com.createaculture', token);
-        $location.path('/index.html');
+        $location.path('/');
         console.log("user signed in")
       })
       .catch(function (error) {
@@ -19,8 +19,8 @@ angular.module('app.auth', [])
     Auth.signup($scope.user)
       .then(function (resp) {
         $window.localStorage.setItem('com.createaculture', resp.data.token);
-        $window.localStorage.setItem('user', resp.data.user);        
-        $location.path('/firstseven');
+        $window.localStorage.setItem('user', resp.data.user);
+        $location.path('/');
         console.log("New user signed up!")
       })
       .catch(function (error) {
@@ -51,8 +51,9 @@ angular.module('app.auth', [])
         FB.api('/me', 'GET', {fields: 'email, first_name, name, id, picture'}, function(response) {
           $scope.$apply(function() {
               $scope.facebook.username = response.name;
-              // $scope.facebook.email = response.email;
+              $scope.facebook.email = response.email;
               $scope.fb_image = response.picture.data.url;
+
               console.log(response);
             });
         })
@@ -63,7 +64,21 @@ angular.module('app.auth', [])
         scope: 'email, user_likes',
         return_scopes: true
     });
-  }
+    setTimeout(function(){ $location.path('/'); }, 3000);
+
+  };
+
+  $scope.deleteUser = function(){
+     Auth.deleteUser($scope.user)
+       .then(function (token) {
+          $window.localStorage.removeItem('com.createaculture', token);
+          $location.path('/signup');
+          console.log('user has been deleted!')
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  };
 
 
 });

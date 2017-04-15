@@ -6,14 +6,20 @@ var Q = require('q');
 
 var findUser = Q.nbind(User.findOne, User);
 var createUser = Q.nbind(User.create, User);
+var findUserAndChange = Q.nbind(User.findOneAndUpdate, User);
+var removeUser = Q.nbind(User.remove, User);
+var findAllUserCategories = Q.nbind(UserCategory.find, UserCategory);
+var findUserCategory = Q.nbind(UserCategory.findOne, UserCategory);
 var createUserCategory = Q.nbind(UserCategory.create, UserCategory);
 var findOneAndChange = Q.nbind(UserCategory.findOneAndUpdate, UserCategory);
-var findUserAndChange = Q.nbind(User.findOneAndUpdate, User);
+var removeUserCategory = Q.nbind(UserCategory.remove, UserCategory);
 
-var categories = ['Faith', 'Hope', 'Kindness', 'Fortitude', 'Diligence', 
+
+var categories = ['Faith', 'Hope', 'Kindness', 'Fortitude', 'Diligence',
                   'Prudence', 'Temperance'];
 
 module.exports = {
+ ///////////////////////////user authentication requests//////////////////////
   signin: function (req, res, next) {
     console.log("this should be a user " + req.body.username)
     var username = req.body.username;
@@ -74,7 +80,7 @@ module.exports = {
             return createUserCategory({
               username: username,
               category: cat
-            });      
+            });
           });
         }
       })
@@ -102,12 +108,52 @@ module.exports = {
           next(error);
         });
     }
-  }, 
+  },
 
-  // The two functions below look very similar. The first 
-  // is for the initial push of ARRAY of beliefs into the 
-  // user's mainBeliefs field
+  deleteUser: function(req, res, next) {
+    console.log("this is the user to delete ", req.body)
+    var username = req.body.username;
+    console.log('this is the user to delete ', username)
+    findUser({username: username})
+      .then(function (user) {
+        if (!user) {
+          next(new Error('User does not exist'));
+        } else {
+            removeUser({ username: username}, function(err) {
+              if (!err) {
+                console.log('user deleted!')
+              } else {
+                console.log(err);
+              }
+            })
+          }
+    })
+  },
+ ///////////////////////////usercategory requests//////////////////////
 
+  getUserCategories: function(req, res, next) {
+    console.log("these are the user categories " + req.body);
+    findAllUserCategories({})
+    .then(function (category) {
+      res.json(category);
+    })
+    .fail(function (err) {
+      console.log("couldn't find user categories")
+      next(error);
+    });
+  },
+
+  addUserCategory: function(req, res) {
+    console.log("reached addUserCategory function");
+    console.log('req.body: ', req.body);
+    createUserCategory({
+      username: req.body.username,
+      name: req.body.name
+    }).catch(function(err){
+      console.log(err);
+    });
+  },
+  //field on each user document
   addMainBeliefs: function(req, res) {
     console.log("Request.body: ", req.body);
     findUserAndChange(
@@ -119,9 +165,8 @@ module.exports = {
     });
   },
 
-  // The one below is for adding a SINGLE belief to the 
+  // The one below is for adding a SINGLE belief to the
   // user's mainBeliefs field
-
   addMainBelief: function(req, res) {
     console.log("Request.body: ", req.body);
     findUserAndChange(
@@ -135,21 +180,10 @@ module.exports = {
 
   addUserBelief: function(req, res) {
     findOneAndChange(
-      {username: req.body.username, name: req.body.category}, 
+      {username: req.body.username, name: req.body.name},
       {$push: {beliefs: req.body.belief}},
       {safe: true, upsert: true}
     ).catch(function(err){
-      console.log(err);
-    });
-  },
-
-  addUserCategory: function(req, res) {
-    console.log("reached addUserCategory function");
-    console.log('req.body: ', req.body);
-    createUserCategory({
-      username: req.body.username,
-      name: req.body.category
-    }).catch(function(err){
       console.log(err);
     });
   },
@@ -165,6 +199,32 @@ module.exports = {
     .catch(function(err){
       console.log(err);
     });
+  },
+
+  removeUserCategory: function(req, res) {
+    console.log("this is the user category to remove ", req.body.name);
+    var username = req.body.username;
+    var name = req.body.name;
+    findUserCategory({
+      username: username,
+      name: name
+    })
+    .then(function (category) {
+      if (!category) {
+        console.log("category does not exist!")
+      } else {
+        removeUserCategory({
+          username: username,
+          name: name
+        }, function(err) {
+          if(!err) {
+            console.log('user category removed!')
+          } else {
+            console.log(err)
+          }
+        })
+      }
+    })
   }
 
 };

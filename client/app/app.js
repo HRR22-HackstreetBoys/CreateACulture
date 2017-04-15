@@ -2,6 +2,7 @@ angular.module('app', [
   'app.factory',
   'app.auth',
   'app.categories',
+  //'app.modalService',
   // 'app.fabric',
   'ngRoute'
 
@@ -16,15 +17,28 @@ angular.module('app', [
       templateUrl: './app/auth/signup.html',
       controller: 'AuthController'
     })
+    .when('/facebook', {
+      templateUrl: './app/auth/facebook.html',
+      controller: 'AuthController'
+    })
+    .when('/signout', {
+      templateUrl: './app/auth/signout.html',
+      controller: 'AuthController'
+    })
+    .when('/deleteUser', {
+      templateUrl: './app/auth/deleteUser.html',
+      controller: 'AuthController'
+    })
     .when('/', {
       templateUrl: './app/categories/main.html',
       controller: 'categoriesController',
-      controller: 'AuthController'
+      controller: 'AuthController',
+      //controller: 'modalController'
       // controller: 'fabricController'
     })
     .when('/firstseven', {
       templateUrl: './app/categories/firstseven.html',
-      controller: 'categoriesController'     
+      controller: 'categoriesController'
     })
     .when('/finalthree', {
       templateUrl: './app/categories/finalthree.html',
@@ -32,12 +46,16 @@ angular.module('app', [
     })
     .when('/chosenseven', {
       templateUrl: './app/categories/chosenseven.html',
-      controller: 'categoriesController'     
+      controller: 'categoriesController'
     })
     .when('/create', {
       templateUrl: './app/categories/create.html',
-      controller: 'categoriesController'     
+      controller: 'categoriesController'
     })
+    // .when('index.html', {
+    //   templateUrl: './index.html',
+    //   controller: 'modalController'
+    // })
     // .when('/fabric', {
     //   templateUrl: './app/fabric/fabric.html',
     //   controller: 'fabricController'

@@ -5,22 +5,21 @@
         <div class="inner">
           <div class="inner cover">
             <h1 class="cover-heading">Of those, what's the most important of all?</h1>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>            
+            <br>
+            <br>
+            <hr></hr>
            <div ng-controller="categoriesController">
+            <br>
 
              <label ng-repeat="category in choices">
 
-               <input class="checkboxList" type="checkbox" checklist-model="primary" checklist-value="category">{{category}}
+               <input class="checkboxListThree" type="checkbox" checklist-model="primary" checklist-value="category">{{category}}
 
              </label>
 
              <br>
 
-             <button type="submit" ng-click="grabResponseAndShowBeliefs()" class="btn btn-success btn-info showBeliefButton">Submit</button>
+             <button type="submit" ng-click="grabResponseAndShowBeliefs()" class="btn-primary" >Submit</button>
 
            </div>
           </div>

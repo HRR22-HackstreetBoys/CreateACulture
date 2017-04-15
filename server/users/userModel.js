@@ -15,7 +15,9 @@ var UserSchema = new Schema({
     required: true
   },
   salt: String,
-  mainBeliefs: [String]
+  mainBeliefs: [String],
+  categories: [String],
+  mainImage: String
 });
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {

@@ -5,17 +5,31 @@ angular.module('app.factory', [])
   var getCategories = function() {
     return $http({
       method: 'GET',
-      url: 'api/categories'
+      url: '/api/categories'
     })
     .then(function(response){
       return response.data;
     });
   };
+  //add belief to existing category
+  var addBelief = function (category, belief) {
+    return $http({
+      method: 'POST',
+      url: '/api/addbelief',
+      data: {
+        name: category,
+        belief: belief
+      }
+    })
+    .then(function(response) {
+      return response.data
+    })
+  };
 
   var getRandomBelief = function(category, itemId) {
     return $http({
       method: 'POST',
-      url: 'api/getrandombelief',
+      url: '/api/getrandombelief',
       data: {
         name: category
       }
@@ -28,7 +42,8 @@ angular.module('app.factory', [])
 
   return {
     getCategories: getCategories,
-    getRandomBelief: getRandomBelief
+    getRandomBelief: getRandomBelief,
+    addBelief: addBelief
   }
 })
 
@@ -40,7 +55,7 @@ angular.module('app.factory', [])
 //     }
 //   // your render logic with provided canvas instance
 
-    
+
 //   }
 
 //   function init(canvasInstance) {
@@ -61,10 +76,12 @@ angular.module('app.factory', [])
   // that JWT is then stored in localStorage as 'com.shortly'
   // after you signin/signup open devtools, click resources,
   // then localStorage and you'll see your token from the server
+
+  ////////////user authentication////////////////////////////////////
   var signin = function (user) {
     return $http({
       method: 'POST',
-      url: '/api/signin',
+      url: '/api/users/signin',
       data: user
     })
     .then(function (resp) {
@@ -74,15 +91,14 @@ angular.module('app.factory', [])
   };
 
   var signup = function (user) {
-    //console.log("this is the factory user")
-    //console.log(user)
     return $http({
       method: 'POST',
-      url: '/api/signup',
+      url: '/api/users/signup',
       data: user
+
     })
     .then(function (resp) {
-       return resp;
+       return resp.data;
     });
   };
 
@@ -95,11 +111,72 @@ angular.module('app.factory', [])
     $location.path('/signin');
   };
 
+  var deleteUser = function (user) {
+    console.log(user);
+    return $http({
+      method: 'DELETE',
+      url: '/api/users/delete',
+      data: user,
+      headers: {'Content-Type': 'application/json;charset=utf-8'}
+    })
+    .success(function(resp) {
+      resp.data;
+    });
+  };
+
+////////////////////////user category requests////////////////////////
+  var getUserCategories = function() {
+    return $http({
+      method: 'GET',
+      url: '/api/usercategories'
+    })
+    .then(function(resp) {
+      resp.data;
+    })
+  };
+
+  var addUserCategories = function(category) {
+    return $http({
+      method: 'POST',
+      url: '/api/addusercategories',
+      data: category
+    })
+    .then(function(response) {
+      return response.data;
+    })
+  };
+  //remove a user created category
+  var removeUserCategories = function(category) {
+    return $http({
+      method: 'DELETE',
+      url: '/api/removeusercategory',
+      data: category,
+      headers: {'Content-Type': 'application/json;charset=utf-8'}
+    })
+    .success(function(reponse) {
+      response.data;
+    })
+  }
+  //add belief to existing usercategory
+  var addUserBelief = function(category, belief) {
+    return $http({
+      method: 'POST',
+      url: '/api/adduserbelief',
+      data: {
+        name: category,
+        belief: belief
+      }
+    })
+    .then(function(response) {
+      return response.data;
+    })
+  };
+
   var addBeliefsToUser = function(beliefsArray) {
     var username = $window.localStorage.getItem('user');
     return $http({
       method: 'POST',
-      url: '/api/addbeliefs',
+      url: '/api/addmainbeliefs',
       data: {
         username: username,
         beliefs: beliefsArray
@@ -114,7 +191,7 @@ angular.module('app.factory', [])
     var username = $window.localStorage.getItem('user');
     return $http({
       method: 'POST',
-      url: '/api/addbelief',
+      url: '/api/addmainbelief',
       data: {
         username: username,
         belief: beliefString
@@ -130,7 +207,7 @@ angular.module('app.factory', [])
     var username = $window.localStorage.getItem('user');
     return $http({
       method: 'PUT',
-      url: 'api/updateaddedbelief',
+      url: '/api/updateaddeduserbelief',
       data: {
         username: username,
         index: index,
@@ -148,8 +225,13 @@ angular.module('app.factory', [])
     signup: signup,
     isAuth: isAuth,
     signout: signout,
+    deleteUser: deleteUser,
+    getUserCategories: getUserCategories,
+    removeUserCategories: removeUserCategories,
     addBeliefsToUser: addBeliefsToUser,
     addBeliefToUser: addBeliefToUser,
     updateAddedBelief: updateAddedBelief
-  };
+
+  }
+
 });

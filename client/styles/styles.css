@@ -1,17 +1,16 @@
 
 
-/*body {
-  margin: 0;
-  margin-top: 15px;
-  margin-left: 15px;
-  margin-right: 15px;
-  margin-bottom: 15px;
-  min-height: 100vh;
-      background:
-        height:100%;
-      background: linear-gradient(0deg, coral , teal 20%, white 60%) no-repeat;
+html,
 
-}*/
+body {
+background: #808080;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to top, #3fada8, #808080);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to top, #3fada8, #808080); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
+
+}
 
 h1 {
   font-size: 50px;
@@ -26,14 +25,15 @@ a {
   font-size: 25px;
 }
 
-/*.checkboxList {
-    border:1px solid #000;
-    background-color:#fff; 
-    color:#000;
-    width:100px; 
-    height: 100px; 
-    overflow-y: scroll;
-}*/
+.checkboxList {
+    margin: 50px 20px;
+    color: black;
+}
+
+.checkboxListThree {
+  margin: 90px 20px;
+  color: black;
+}
 
 /*p {
   font-size: 25px;
@@ -95,16 +95,7 @@ a {
  * Base structure
  */
 
-html,
-body {
-  height: 100%;
-  background-color: #80aaff;
-}
-body {
-  color: #fff;
-  text-align: center;
-  text-shadow: 0 .05rem .1rem rgba(0,0,0,.5);
-}
+
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
@@ -321,8 +312,8 @@ body {
 /* signin.html signup.html ------------------------------------------------------------------------------*/
 
 .redirectSignup {
-  color: purple;
+  color: #4fff;
 }
 .redirectSignin {
-  color: purple;
+  color: #4fff;
 }

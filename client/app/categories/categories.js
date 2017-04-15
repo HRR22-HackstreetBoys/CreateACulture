@@ -11,7 +11,6 @@ angular.module('app.categories', ['app.checklist-model'])
 // $scope is the intermediary between what the user sees and the
 // factory. $scope methods grab from the factory and display it
 // via html
-
   $scope.workable = [];
 
   $scope.getAll = function() {
@@ -54,7 +53,7 @@ angular.module('app.categories', ['app.checklist-model'])
 
   $scope.grabResponseAndShowQuestionTwo = function() {
     $location.path('/finalthree');
-    // $scope.questionOneDiv = false;    
+    // $scope.questionOneDiv = false;
     // $scope.questionTwoDiv = true;
   }
 
@@ -73,7 +72,7 @@ angular.module('app.categories', ['app.checklist-model'])
         $scope.sevenBeliefs[itemId] = data;
       }).catch(function(err) {
         console.log(err);
-      })      
+      })
     };
     if(itemId === 6) {
       // $scope.beliefDiv6 = true;
@@ -82,7 +81,7 @@ angular.module('app.categories', ['app.checklist-model'])
         $scope.sevenBeliefs[itemId] = data;
       }).catch(function(err) {
         console.log(err);
-      })     
+      })
     };
     if(itemId === 7) {
       $scope.beliefDiv7 = true;
@@ -112,7 +111,7 @@ angular.module('app.categories', ['app.checklist-model'])
   }
 
   $scope.grabResponseAndShowBeliefs = function() {
-    $location.path('/chosenseven');   
+    $location.path('/chosenseven');
     var index = $scope.choices.indexOf($scope.primary[0]);
     console.log(index);
     $scope.choices.unshift(($scope.choices.splice(index, 1))[0]);
@@ -155,6 +154,14 @@ angular.module('app.categories', ['app.checklist-model'])
     $scope.addedBelief = null;
   };
 
+  $scope.removeCategory = function(list, item) {
+      if(list.indexOf(item) !== -1) {
+        var answer = list.splice(list.indexOf(item), 1);
+        Categories.removeCategory(item);
+      }
+
+  }
+
   $scope.makeImage = function() {
     $location.path('/create');
   }
@@ -179,9 +186,9 @@ angular.module('app.categories', ['app.checklist-model'])
     ctx.fillText($scope.sevenBeliefs[5],110,470,280);
     ctx.fillText($scope.sevenBeliefs[6],110,490,280);
     // if($scope.sevenBeliefs[7]){
-    ctx.fillText($scope.sevenBeliefs[7],110,510,280);   
+    ctx.fillText($scope.sevenBeliefs[7],110,510,280);
     // }
-      // ctx.fillText($scope.sevenBeliefs[8],110,530,280);   
+      // ctx.fillText($scope.sevenBeliefs[8],110,530,280);
 
   }
 
