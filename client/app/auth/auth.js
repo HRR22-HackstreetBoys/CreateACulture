@@ -1,25 +1,38 @@
 angular.module('app.auth', [])
 
-.controller('AuthController', function ($scope, $window, $location, Auth) {
+.controller('AuthController', function ($scope, $window, $location, dataService, Categories, Auth) {
   $scope.user = {};
 
   $scope.signin = function () {
     Auth.signin($scope.user)
       .then(function (token) {
-        $window.localStorage.setItem('com.createaculture', token);
-        $location.path('/');
-        console.log("user signed in")
+        // console.log("token in scope.signin: ", token);
+        if(token === 401) {
+          $location.path('/signup');
+        } else {
+          console.log("in signin, $scope.user.username: ", $scope.user.username);
+          $window.localStorage.setItem('com.createaculture', token);
+          $window.localStorage.setItem('user', $scope.user.username);        
+          Categories.getUserCatsAndBeliefs($scope.user.username)
+            .then(function(data) {
+              dataService.mainBeliefs = data.mainBeliefs;
+              dataService.returningUserCategories = data.categories;
+            });
+          $location.path('/homebase');
+        }
       })
       .catch(function (error) {
-        console.error(error);
+        console.error("Error:", error);
       });
   };
 
   $scope.signup = function () {
+    console.log("$scope.user: ", $scope.user);
     Auth.signup($scope.user)
       .then(function (resp) {
-        $window.localStorage.setItem('com.createaculture', resp.data.token);
-        $window.localStorage.setItem('user', resp.data.user);
+        console.log("resp.data: ", resp);
+        $window.localStorage.setItem('com.createaculture', resp.token);
+        $window.localStorage.setItem('user', resp.user);        
         $location.path('/');
         console.log("New user signed up!")
       })
@@ -40,7 +53,7 @@ angular.module('app.auth', [])
       });
   };
 
-   $scope.facebook = {
+  $scope.facebook = {
     username : "",
     email : ""
   };
@@ -78,6 +91,7 @@ angular.module('app.auth', [])
         .catch(function (error) {
           console.log(error);
         });
+    $location.path('/');  
   };
 
 

@@ -38,5 +38,8 @@ module.exports = function(app, express) {
   app.delete('/api/removeusercategory', userController.removeUserCategory);
 
 
+  app.post('/api/getusercatsandbeliefs', userController.getCatsAndBeliefs);
+
+  app.post('/api/deletebelief', userController.deleteMainBelief);
 
 };

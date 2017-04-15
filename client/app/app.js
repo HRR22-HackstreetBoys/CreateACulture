@@ -3,7 +3,6 @@ angular.module('app', [
   'app.auth',
   'app.categories',
   //'app.modalService',
-  // 'app.fabric',
   'ngRoute'
 
   ])
@@ -32,9 +31,8 @@ angular.module('app', [
     .when('/', {
       templateUrl: './app/categories/main.html',
       controller: 'categoriesController',
-      controller: 'AuthController',
+      controller: 'AuthController'
       //controller: 'modalController'
-      // controller: 'fabricController'
     })
     .when('/firstseven', {
       templateUrl: './app/categories/firstseven.html',
@@ -52,14 +50,14 @@ angular.module('app', [
       templateUrl: './app/categories/create.html',
       controller: 'categoriesController'
     })
-    // .when('index.html', {
-    //   templateUrl: './index.html',
-    //   controller: 'modalController'
-    // })
-    // .when('/fabric', {
-    //   templateUrl: './app/fabric/fabric.html',
-    //   controller: 'fabricController'
-    // })
+    .when('/icons', {
+      templateUrl: './app/categories/icons.html',
+      controller: 'categoriesController'     
+    })
+    .when('/homebase', {
+      templateUrl: './app/categories/homebase.html',
+      controller: 'categoriesController'    
+    })
     .otherwise({
       redirectTo: '/signin'
     });

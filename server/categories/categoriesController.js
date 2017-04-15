@@ -10,7 +10,7 @@ var findOneAndChange = Q.nbind(Category.findOneAndUpdate, Category);
 module.exports = {
 
   getCategories: function(req, res, next) {
-    console.log("reached getCategories " + req);
+    // console.log("reached getCategories " + req);
     findAllCategories({})
     .then(function (category) {
         res.json(category);
