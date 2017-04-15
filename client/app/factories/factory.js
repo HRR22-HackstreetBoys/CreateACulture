@@ -49,7 +49,6 @@ angular.module('app.factory', [])
       }
     })
     .then(function(response) {
-      // console.log("Response.data in GETUSERCATSAND: ", response.data);
       return response.data;
     })
   };
