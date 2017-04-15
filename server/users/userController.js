@@ -15,6 +15,7 @@ var findOneAndChange = Q.nbind(UserCategory.findOneAndUpdate, UserCategory);
 var removeUserCategory = Q.nbind(UserCategory.remove, UserCategory);
 var findUserAndGetCategories = Q.nbind(UserCategory.find, UserCategory);
 
+var categories = ['Faith', 'Hope', 'Kindness', 'Fortitude', 'Diligence', 'Prudence', 'Temperance'];
 
 module.exports = {
  ///////////////////////////user authentication requests//////////////////////
@@ -25,8 +26,11 @@ module.exports = {
 
     findUser({username: username})
       .then(function (user) {
+        console.log(user);
         if (!user) {
-          next(new Error('User does not exist'));
+          res.status(401).send();
+
+          // next(new Error('User does not exist'));
         } else {
           return user.comparePassword(password)
             .then(function (foundUser) {
@@ -57,6 +61,7 @@ module.exports = {
   },
 
   signup: function (req, res, next) {
+    console.log("Req.body: ", req.body);
     console.log("this is the username we want " + req.body.username)
     var username = req.body.username;
     var password = req.body.password;
@@ -75,6 +80,7 @@ module.exports = {
         }
       })
       .then(function (user) {
+        console.log("User: ", user);
         // create token to send back for auth
         var token = jwt.encode(user, 'secret');
         res.send(JSON.stringify({token: token, user: username}));

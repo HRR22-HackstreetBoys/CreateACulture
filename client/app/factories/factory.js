@@ -80,7 +80,13 @@ angular.module('app.factory', [])
     .then(function (resp) {
       console.log("Response from signin: ", resp);
       return resp.data.token;
-    });
+    })
+    .catch(function(error){
+      if(error.status === 401){
+        return error.status;
+      }
+      console.error(error);
+    })
   };
 
   var signup = function (user) {
